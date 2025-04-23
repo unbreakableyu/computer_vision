@@ -20,7 +20,11 @@ def show_images(images: t_image_list, names: t_str_list) -> None:
     Returns:
         None
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    for img, name in zip(images, names):
+        cv2.imshow(name, img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
 def save_images(images: t_image_list, filenames: t_str_list, **kwargs) -> None:
@@ -35,7 +39,9 @@ def save_images(images: t_image_list, filenames: t_str_list, **kwargs) -> None:
     Returns:
         None
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    for img, name in zip(images, filenames):
+        cv2.imwrite(name, img)
 
 
 def scale_down(image: np.array) -> np.array:
@@ -47,7 +53,8 @@ def scale_down(image: np.array) -> np.array:
     Returns:
         A numpy array with an opencv image half the size of the original image
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    return cv2.resize(image, (image.shape[1] // 2, image.shape[0] // 2))
 
 
 def separate_channels(colored_image: np.array) -> t_image_triplet:
@@ -60,4 +67,12 @@ def separate_channels(colored_image: np.array) -> t_image_triplet:
         A tuple with three BGR images the first one containing only the Blue channel active, the second one only the
         green, and the third one only the red.
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    b, g, r = cv2.split(colored_image)
+    zero = np.zeros_like(b)
+
+    blue_img = cv2.merge([b, zero, zero])
+    green_img = cv2.merge([zero, g, zero])
+    red_img = cv2.merge([zero, zero, r])
+
+    return blue_img, green_img, red_img
